@@ -119,16 +119,6 @@ function App() {
     localStorage.setItem("likedQuotes", JSON.stringify(likedQuotes));
   }, [likedQuotes]);
 
-  useEffect(() => {
-    const exists = likedQuotes.some(
-      (q) => q.quote === quote && q.author === author
-    );
-
-    if (!exists) {
-      setLiked(null);
-    }
-  }, [likedQuotes, quote, author]);
-
   return (
     <div className="app">
 
@@ -174,7 +164,6 @@ function App() {
           onClick={() => {
             setLiked(false);
 
-            // 🔥 REMOVE FROM SAVED
             setLikedQuotes((prev) =>
               prev.filter(
                 (q) => !(q.quote === quote && q.author === author)
