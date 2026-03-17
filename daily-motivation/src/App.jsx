@@ -1,3 +1,5 @@
+import SavedQuotes from "./components/SavedQuotes";
+
 import { useEffect, useRef, useState } from "react";
 import {
   FaSync,
@@ -10,12 +12,14 @@ import {
 
 import "./App.css";
 
+
 function App() {
   const [quote, setQuote] = useState("");
   const [author, setAuthor] = useState("");
   const [fontSize, setFontSize] = useState(40);
   const [liked, setLiked] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [likedQuotes, setLikedQuotes] = useState([]);
 
   const quoteRef = useRef(null);
 
@@ -57,6 +61,24 @@ function App() {
     }
   };
 
+  const clearLiked = () => {
+    setLikedQuotes([]);
+  };
+
+  const handleLike = () => {
+    setLiked(true);
+
+    const newQuote = { quote, author };
+
+    const exists = likedQuotes.some(
+      (q) => q.quote === quote && q.author === author
+    );
+
+    if (!exists) {
+      setLikedQuotes((prev) => [newQuote, ...prev]);
+    }
+  };
+
   // 🔥 INITIAL LOAD
   useEffect(() => {
     fetchQuote();
@@ -87,6 +109,25 @@ function App() {
     el.style.fontSize = size + "px";
     setFontSize(size);
   }, [quote]);
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem("likedQuotes")) || [];
+    setLikedQuotes(saved);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("likedQuotes", JSON.stringify(likedQuotes));
+  }, [likedQuotes]);
+
+  useEffect(() => {
+    const exists = likedQuotes.some(
+      (q) => q.quote === quote && q.author === author
+    );
+
+    if (!exists) {
+      setLiked(null);
+    }
+  }, [likedQuotes, quote, author]);
 
   return (
     <div className="app">
@@ -122,7 +163,7 @@ function App() {
 
         <button
           className={liked === true ? "active" : ""}
-          onClick={() => setLiked(true)}
+          onClick={handleLike}
           data-label="Like"
         >
           <FaHeart />
@@ -130,13 +171,28 @@ function App() {
 
         <button
           className={liked === false ? "active" : ""}
-          onClick={() => setLiked(false)}
+          onClick={() => {
+            setLiked(false);
+
+            // 🔥 REMOVE FROM SAVED
+            setLikedQuotes((prev) =>
+              prev.filter(
+                (q) => !(q.quote === quote && q.author === author)
+              )
+            );
+          }}
           data-label="Dislike"
         >
           <FaThumbsDown />
         </button>
 
       </div>
+
+      <SavedQuotes
+        likedQuotes={likedQuotes}
+        clearLiked={clearLiked}
+      />
+
     </div>
   );
 }
