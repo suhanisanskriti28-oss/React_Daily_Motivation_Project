@@ -19,7 +19,14 @@ function App() {
   const [fontSize, setFontSize] = useState(40);
   const [liked, setLiked] = useState(null);
   const [copied, setCopied] = useState(false);
-  const [likedQuotes, setLikedQuotes] = useState([]);
+  const [likedQuotes, setLikedQuotes] = useState(() => {
+    try {
+      const saved = localStorage.getItem("likedQuotes");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
   const quoteRef = useRef(null);
 
@@ -109,11 +116,6 @@ function App() {
     el.style.fontSize = size + "px";
     setFontSize(size);
   }, [quote]);
-
-  useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("likedQuotes")) || [];
-    setLikedQuotes(saved);
-  }, []);
 
   useEffect(() => {
     localStorage.setItem("likedQuotes", JSON.stringify(likedQuotes));
