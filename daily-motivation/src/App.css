@@ -1,0 +1,231 @@
+@font-face {
+  font-family: "LondonHistory";
+  src: url("/LondonHistory.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Full screen */
+body,
+html,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+/* Background */
+.app {
+  height: 100vh;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-image: url("/bg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Wrapper (container + button) */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+}
+
+/* Main container = FULL QUOTE AREA */
+.container {
+  width: 550px;
+  height: 750px;
+  position: relative;
+
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 40px;
+  text-align: center;
+
+  /* Foreground background */
+  background-image: url("/fg.png");
+  background-size: cover;
+  background-position: center;
+
+  /* Glass + overlay */
+  backdrop-filter: blur(15px);
+  background-color: rgba(0, 0, 0, 0.4);
+
+  /* Glow */
+  box-shadow:
+    /* 🔮 EVEN GLOW AROUND (main pop) */
+    0 0 20px rgba(255, 0, 200, 0.4),
+    0 0 40px rgba(255, 0, 200, 0.3),
+    0 0 80px rgba(255, 0, 200, 0.2),
+
+    0 0 30px rgba(0, 150, 255, 0.3),
+    0 0 60px rgba(0, 150, 255, 0.2),
+    0 0 120px rgba(0, 150, 255, 0.1),
+
+    /* 🌫️ SOFT AMBIENT SHADOW (all around) */
+    0 0 100px rgba(0, 0, 0, 0.6),
+
+    /* 🪶 VERY SUBTLE DEPTH */
+    0 10px 30px rgba(0, 0, 0, 0.4);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* BIG QUOTE */
+.quote {
+  font-family: "LondonHistory", serif;
+  font-weight: 600;
+  line-height: 1.4;
+
+  color: white;
+
+  flex: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  word-break: break-word;
+  overflow-wrap: break-word;
+
+  text-shadow:
+    0 0 10px rgba(255, 0, 200, 0.5),
+    0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Author */
+.author {
+  font-size: 16px;
+  opacity: 0.7;
+  margin-top: 10px;
+  color: white;
+}
+
+/* Right-side panel */
+.controls {
+  position: fixed;
+  right: 45px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  flex-direction: column;
+  gap: 45px;
+}
+.controls button {
+  width: 70px;
+  height: 70px;
+
+  border-radius: 50%;
+  border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+  cursor: pointer;
+
+  background: rgba(0, 0, 0, 0.4);
+  color: white;
+
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+
+  transition: 0.3s ease;
+}
+.controls button:hover {
+  transform: scale(1.15);
+
+  box-shadow:
+    0 0 15px rgba(255, 0, 200, 0.6),
+    0 0 30px rgba(0, 150, 255, 0.4);
+}
+.controls button.active {
+  background: rgba(0, 0, 0, 0.7); /* dark like card */
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  box-shadow:
+    /* subtle inner glow */
+    inset 0 0 10px rgba(255, 255, 255, 0.05),
+
+    /* outer soft aura (matching card vibe) */
+    0 0 20px rgb(46, 46, 46),
+    0 0 40px rgba(255, 0, 200, 0.383);
+
+  backdrop-filter: blur(15px);
+}
+
+/* Tooltip base */
+.controls button {
+  position: relative;
+}
+
+/* Tooltip text */
+.controls button::after {
+  content: attr(data-label);
+
+  position: absolute;
+  right: 65px; /* space from button */
+  top: 50%;
+  transform: translateY(-50%);
+
+  padding: 6px 12px;
+  border-radius: 8px;
+
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 12px;
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: 0.2s ease;
+}
+
+/* Show on hover */
+.controls button:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-5px);
+}
+
+.controls button.active {
+  /* 🔥 Use SAME image as card */
+  background-image: url("/fg.png");
+  background-size: cover;
+  background-position: center;
+
+  /* Overlay so icon stays visible */
+  background-color: rgba(0, 0, 0, 0.5);
+  background-blend-mode: overlay;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+
+  /* Glow to match card */
+  box-shadow:
+    0 0 15px rgba(255, 0, 200, 0.6),
+    0 0 30px rgba(140, 0, 255, 0.5),
+    0 0 60px rgba(140, 0, 255, 0.3);
+
+  backdrop-filter: blur(10px);
+}
