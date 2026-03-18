@@ -4,7 +4,7 @@ import { useState } from "react";
 
 function SavedQuotes({ likedQuotes, clearLiked }) {
 
-  const [isClearing, setIsClearing] = useState(false); // ✅ MOVE HERE
+  const [isClearing, setIsClearing] = useState(false); //  MOVE HERE
 
   return (
     <div className="saved-panel">
